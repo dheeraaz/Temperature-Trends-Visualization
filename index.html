@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Report</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>                
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="input-grp">
+        <input type="text" placeholder="Enter city name" id="input-box">  
+        <button id="input-btn">Search</button>
+    </div>
+
+    <div class="weather-report">
+        <div class="city-title"><p></p></div>
+        <div class="temperature-box">
+           <div class="min-temperature"><p>Min Temperature: <span></span></p></div> 
+           <div class="max-temperature"><p>Max Temperature: <span></span></p></div> 
+        </div>
+    </div>
+
+    <div class="graph-box">
+        <canvas id="myChart"></canvas>
+    </div>
+
+
+</body>
+</html>
