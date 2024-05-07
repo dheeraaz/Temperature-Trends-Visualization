@@ -47,7 +47,6 @@ const weatherData = async () => {
     const response = await fetch(url + `&q=${cityName}` + `&appid=${key}`);
     const data = await response.json();
 
-
     let lists = data.list;
 
     let dateTempMap = toDateTempObj(lists);
@@ -57,13 +56,13 @@ const weatherData = async () => {
     console.log(dateTempArray);
 
     [minTemperature, maxTemperature] = getTempValue(dateTempArray[count]);
-    drawgraph(dateTempArray[count]);
+    drawgraph(dateTempArray[count],1);
     displayData(minTemperature, maxTemperature);
     count++;
 
     allDay.addEventListener("click", () => {
         [minTemperature, maxTemperature] = getTempValue(dateTempMap);
-        drawgraph(dateTempMap, "of all days");
+        drawgraph(dateTempMap, 0, "of all days");
         displayData(minTemperature, maxTemperature);
         count = 1;
     })
@@ -71,7 +70,7 @@ const weatherData = async () => {
     next.addEventListener("click", ()=>{
         if(count>=0 && count<dateTempArray.length){
             [minTemperature, maxTemperature] = getTempValue(dateTempArray[count]);
-            drawgraph(dateTempArray[count]);
+            drawgraph(dateTempArray[count],1);
             displayData(minTemperature, maxTemperature);
             count++;
         }
@@ -144,26 +143,43 @@ function getTempValue(customObject) {
 
 }
 // for drawing graph
-function drawgraph(elem, lT="") {
+function drawgraph(elem,fg, lT="") {
 
     const ctx = document.getElementById('myChart');
-
+    let flag = fg;
     let labelText;
+
+    //for label text message
     if(lT===""){
         for(let key in elem){
             labelText ="on "+key.split(' ')[0]; //for getting the first date of an object
+            
+            
+            const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+            let toDate = new Date(labelText).getDay();
+            
+            labelText = labelText+" "+weekday[toDate]
+          
             break;
         }
     }else{
         labelText = lT;
     }
 
+    //for displaying x-axis value
     let xAxisName = [];
     let myData = [];
 
-    for (let key in elem) {
-        xAxisName.push(key);
-        myData.push(elem[key]);
+    if(flag===1){
+        for (let key in elem) {
+            xAxisName.push(key.split(' ')[1]);
+            myData.push(elem[key]);
+        }
+    }else{
+        for (let key in elem) {
+            xAxisName.push(key);
+            myData.push(elem[key]);
+        }
     }
 
     const data = {
@@ -199,7 +215,6 @@ function displayData(minT, maxT) {
     const weatherReport = document.querySelector(".weather-report");
     const minTemperature = document.querySelector(".min-temperature p span");
     const maxTemperature = document.querySelector(".max-temperature p span");
-
 
     weatherReport.style.display = "block";
 
